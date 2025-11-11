@@ -16,6 +16,7 @@ const App = () => {
     }
   };
 
+
   return (
     <>
       {page === 'landing' && <LandingPage onSignIn={() => setPage('signin')} />}
