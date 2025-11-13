@@ -571,26 +571,33 @@ const PSUForeSight = () => {
     }
   }, [data, selectedYear]);
 
-  // Filter options (Year, College, Sem)
-  const filterOptions = useMemo(() => {
-    if (!data || data.length === 0)
-      return { years: ["all"], colleges: ["All"], semesters: ["All"] };
+// Filter options (Year, College, Sem)
+const filterOptions = useMemo(() => {
+  if (!data || data.length === 0)
+    return { years: ["all"], colleges: ["All"], semesters: ["All"] };
 
-    const years = [...new Set(data.map((d) => d.Year))].sort((a, b) => b - a);
-    const colleges = ["All", ...new Set(data.map((d) => d.College))];
+  const years = [...new Set(data.map((d) => d.Year))].sort((a, b) => b - a);
+  const colleges = ["All", ...new Set(data.map((d) => d.College))];
 
+  let semesters = [];
+
+  if (selectedYear && selectedYear !== "all") {
     // Only show semesters that exist for the selected year
     const semestersSet = new Set(
       data
-        .filter((d) => !selectedYear || d.Year === selectedYear)
+        .filter((d) => d.Year === selectedYear)
         .map((d) => d.Sem)
         .filter(Boolean)
     );
+    semesters = ["All", ...semOrder.filter((s) => semestersSet.has(s))];
+  } else {
+    // All Years selected → always show 1st, 2nd, Mid
+    semesters = ["All", ...semOrder];
+  }
 
-    const semesters = ["All", ...semOrder.filter((s) => semestersSet.has(s))];
+  return { years: ["all", ...years], colleges, semesters };
+}, [data, selectedYear]);
 
-    return { years: ["all", ...years], colleges, semesters };
-  }, [data, selectedYear]);
 
   // ✅ Automatically set latest semester for selected year
   useMemo(() => {
