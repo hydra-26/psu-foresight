@@ -9,11 +9,18 @@ const SignIn = ({ onLogin, onBack }) => {
   const [error, setError] = useState("");
   const [isFocused, setIsFocused] = useState({ email: false, password: false });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const success = onLogin(email, password);
-    if (!success) setError("Invalid email or password");
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const success = onLogin(email, password);
+  //   if (!success) setError("Invalid email or password");
+  // };
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  const success = await onLogin(email, password);
+  if (!success) setError("Invalid email or password");
+};
+
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
